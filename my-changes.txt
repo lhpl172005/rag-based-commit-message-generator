@@ -1,0 +1,40 @@
+diff --git a/main.py b/main.py
+index 1a2b3c..4d5e6f 100644
+--- a/main.py
++++ b/main.py
+
+@@ -1,6 +1,9 @@
++from validator import Validator
++
+ def register_user(username, email):
+-    # Logic to register user
+-    print(f"Registering user {username} with email {email}")
++    if not Validator.validate_user(username, email):
++        print("Error: Invalid username or email.")
++        return "Registration failed due to validation error."
+     
++    print(f"Successfully registered user {username} with email {email}")
+     return "User registered successfully"
+diff --git a/validator.py b/validator.py
+new file mode 100644
+index 0000000..a1b2c3d
+--- /dev/null
++++ b/validator.py
+@@ -0,0 +1,15 @@
++import re
++
++class Validator:
++    @staticmethod
++    def validate_username(username):
++        """Username must be at least 5 characters long."""
++        return len(username) >= 5
++
++    @staticmethod
++    def validate_email(email):
++        """Check for a valid email format."""
++        pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
++        return re.match(pattern, email) is not None
++
++    @staticmethod
++    def validate_user(username, email):
++        return Validator.validate_username(username) and Validator.validate_email(email)
